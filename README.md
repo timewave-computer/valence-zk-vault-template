@@ -5,6 +5,17 @@
 - [Nix](https://nixos.org/download/)
 
 2. Start the development environment (the first time may take a few minutes):
-   ```bash
-   nix develop
-   ```
+
+```bash
+nix develop
+```
+
+3. Start ethereum testnet node
+```bash
+./scripts/start-anvil.sh
+```
+
+4. Generate a deploy key
+```bash
+./scripts/manage-key.sh
+```
