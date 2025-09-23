@@ -2,7 +2,7 @@
 
 ## Getting started
 1. Install prerequisites
-- [NixOs](https://nixos.org/download/)
+- [Nix](https://nixos.org/download/)
 
 2. Start the development environment (the first time may take a few minutes):
    ```bash

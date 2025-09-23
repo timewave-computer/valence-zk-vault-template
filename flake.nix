@@ -2,7 +2,7 @@
   description = "Valence ZK Vault Template Development Environment";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -13,7 +13,7 @@
           inherit system;
         };
 
-        nodejs = pkgs.nodejs_20;
+        nodejs = pkgs.nodejs_22;
         npm = pkgs.nodePackages.npm;
       in
       {
