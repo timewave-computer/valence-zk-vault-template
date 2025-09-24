@@ -31,5 +31,5 @@ echo "Anvil is ready! Listening on http://localhost:8545"
 echo "Process ID: $(cat .anvil.pid)"
 echo "Log file: anvil.log"
 
-echo "Anvil started in background. Use 'kill \$(cat .anvil.pid)' to stop it."
+echo "Anvil started in background. Use 'kill-anvil.sh' to stop it."
 echo "To view logs: tail -f anvil.log"
