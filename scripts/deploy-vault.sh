@@ -1,16 +1,13 @@
 #!/bin/bash
+set -euo pipefail
 source .env
-
-
-# Create project structure
-mkdir -p scripts lib
-
-# Download dependencies directly
-echo "Downloading dependencies..."
 
 # Create lib directory if it doesn't exist
 mkdir -p lib
 
+
+# Download dependencies directly
+echo "Downloading dependencies..."
 
 # Download forge-std
 if [ ! -d lib/forge-std ]; then

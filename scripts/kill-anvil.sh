@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 if [ -f .anvil.pid ]; then
     echo "Killing Anvil node..."
