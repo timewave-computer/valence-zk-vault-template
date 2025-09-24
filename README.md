@@ -26,3 +26,11 @@ manage-key.sh
 ```bash
 deploy-vault.sh
 ```
+
+6. Start front end (in a dedicated dev shell)
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Access the dev server at `http://localhost:3000`.
