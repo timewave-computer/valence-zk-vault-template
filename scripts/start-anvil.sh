@@ -15,7 +15,7 @@ anvil \
     --chain-id 31337 \
     --balance 10000 \
     --fork-url https://eth-mainnet.public.blastapi.io \
-    --fork-block-number 19250000 > anvil.log 2>&1 & echo $! > .anvil.pid
+    --fork-block-number 23000000 > anvil.log 2>&1 & echo $! > .anvil.pid
 
 # Wait for Anvil to start
 echo "Waiting for Anvil to initialize..."
@@ -31,5 +31,5 @@ echo "Anvil is ready! Listening on http://localhost:8545"
 echo "Process ID: $(cat .anvil.pid)"
 echo "Log file: anvil.log"
 
-echo "Anvil started in background. Use 'kill \$(cat .anvil.pid)' to stop it."
+echo "Anvil started in background. Use 'kill-anvil.sh' to stop it."
 echo "To view logs: tail -f anvil.log"
