@@ -6,3 +6,4 @@ cache/*
 forge-artifacts/*
 lib/*
 deployed-addresses.txt
+vaults.config.json
