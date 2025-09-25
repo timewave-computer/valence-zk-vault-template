@@ -83,6 +83,8 @@ echo "Error: Deployment failed. Check deployment.log for details."
 exit 1
 fi
 
+echo "Vaults deployed successfully!"
+
 # Extract and save contract addresses
 echo "Saving deployed addresses..."
 if grep "Deployed addresses:" -A 6 deployment.log > deployed-addresses.txt; then
@@ -97,15 +99,13 @@ ETH_VAULT_ADDRESS=$(awk '/ETH Vault:/ {print $3}' deployed-addresses.txt)
 
 
 rm deployment.log
-echo "Vaults deployed successfully!"
 
 # Create vaults.config.json for frontend
 echo "Creating vaults.config.json..."
-mkdir -p frontend/src/config
 
 # Extract vault addresses (lines containing "Vault") and create JSON array
-VAULT_ADDRESSES=$(grep "Vault:" deployed-addresses.txt | awk '{print $3}' | tr '\n' ',' | sed 's/,$//')
-echo "[$VAULT_ADDRESSES]" | sed 's/,/","/g' | sed 's/\[/["/g' | sed 's/\]/"]/g' > frontend/vaults.config.json
+VAULT_ADDRESSES=$(grep "Vault:" deployed-addresses.txt | awk '{print $3}' | tr '\n' ',' | awk '{gsub(/,$/, ""); print}')
+echo "[$VAULT_ADDRESSES]" | awk '{gsub(/,/, "\",\""); gsub(/\[/, "[\""); gsub(/\]/, "\"]"); print}' > frontend/vaults.config.json
 
 echo "Created frontend/vaults.config.json with vault addresses"
 else
