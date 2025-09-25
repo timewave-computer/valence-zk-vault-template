@@ -83,6 +83,8 @@ echo "Error: Deployment failed. Check deployment.log for details."
 exit 1
 fi
 
+echo "Vaults deployed successfully!"
+
 # Extract and save contract addresses
 echo "Saving deployed addresses..."
 if grep "Deployed addresses:" -A 6 deployment.log > deployed-addresses.txt; then
@@ -90,32 +92,22 @@ if grep "Deployed addresses:" -A 6 deployment.log > deployed-addresses.txt; then
 # Use awk for more reliable extraction
 USDC_ADDRESS=$(awk '/USDC:/ {print $2}' deployed-addresses.txt)
 USDC_VAULT_ADDRESS=$(awk '/USDC Vault:/ {print $3}' deployed-addresses.txt)
+BTC_ADDRESS=$(awk '/BTC:/ {print $2}' deployed-addresses.txt)
+BTC_VAULT_ADDRESS=$(awk '/BTC Vault:/ {print $3}' deployed-addresses.txt)
+ETH_ADDRESS=$(awk '/ETH:/ {print $2}' deployed-addresses.txt)
+ETH_VAULT_ADDRESS=$(awk '/ETH Vault:/ {print $3}' deployed-addresses.txt)
 
-# Verify addresses were extracted
-if [ -z "$USDC_ADDRESS" ] || [ -z "$USDC_VAULT_ADDRESS" ]; then
-    echo "Error: Failed to extract one or more addresses"
-    echo "Content of deployed-addresses.txt:"
-    cat deployed-addresses.txt
-    exit 1
-fi
-
-# Export variables immediately for current session
-export USDC_ADDRESS
-export USDC_VAULT_ADDRESS
-
-# Create session-specific Next.js environment file
-{
-    echo "# Session-specific environment variables"
-    echo "NEXT_PUBLIC_USDC_ADDRESS=$USDC_ADDRESS"
-    echo "NEXT_PUBLIC_USDC_VAULT_ADDRESS=$USDC_VAULT_ADDRESS"
-} > .env.local
 
 rm deployment.log
-echo "Vaults deployed successfully!"
-echo "Session-specific addresses saved to .env.local"
-echo "Token addresses exported to environment:"
-echo "USDC: $USDC_ADDRESS"
-echo "USDC Vault: $USDC_VAULT_ADDRESS"
+
+# Create vaults.config.json for frontend
+echo "Creating vaults.config.json..."
+
+# Extract vault addresses (lines containing "Vault") and create JSON array
+VAULT_ADDRESSES=$(grep "Vault:" deployed-addresses.txt | awk '{print $3}' | tr '\n' ',' | awk '{gsub(/,$/, ""); print}')
+echo "[$VAULT_ADDRESSES]" | awk '{gsub(/,/, "\",\""); gsub(/\[/, "[\""); gsub(/\]/, "\"]"); print}' > frontend/vaults.config.json
+
+echo "Created frontend/vaults.config.json with vault addresses"
 else
 echo "Error: Could not find deployed addresses in output."
 exit 1

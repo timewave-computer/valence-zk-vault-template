@@ -43,8 +43,12 @@ contract DeployVaults is Script {
         vm.startBroadcast(deployerPrivateKey);
 
         MockToken usdc = new MockToken("USD Coin", "USDC", 6);
+        MockToken btc = new MockToken("Bitcoin", "BTC", 8);
+        MockToken eth = new MockToken("Ethereum", "ETH", 18);
 
         SimpleVault usdcVault = new SimpleVault(usdc, "USDC Vault", "vUSDC");
+        SimpleVault btcVault = new SimpleVault(btc, "BTC Vault", "vBTC");
+        SimpleVault ethVault = new SimpleVault(eth, "ETH Vault", "vETH");
 
         vm.stopBroadcast();
 
@@ -52,5 +56,9 @@ contract DeployVaults is Script {
         console.log("Deployed addresses:");
         console.log("USDC:", address(usdc));
         console.log("USDC Vault:", address(usdcVault));
+        console.log("BTC:", address(btc));
+        console.log("BTC Vault:", address(btcVault));
+        console.log("ETH:", address(eth));
+        console.log("ETH Vault:", address(ethVault));
     }
 } 
