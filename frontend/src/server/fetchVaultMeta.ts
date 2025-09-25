@@ -7,6 +7,7 @@ import vaultAddresses from "../../vaults.config.json";
 export type VaultMeta = {
   vault: {
     address: Address;
+    name: string;
     decimals: number;
     totalAssets: bigint;
   };
@@ -25,6 +26,12 @@ export async function fetchVaultsMetadata(): Promise<VaultMeta[]> {
 
       const vaultContractQueries = await readContracts(wagmiConfig, {
         contracts: [
+          {
+            address: vaultAddress,
+            abi: erc20Abi,
+            functionName: "name",
+            args: [],
+          },
           {
             address: vaultAddress,
             abi: erc4626Abi,
@@ -46,9 +53,10 @@ export async function fetchVaultsMetadata(): Promise<VaultMeta[]> {
         ],
       });
 
-      const assetAddress = vaultContractQueries[0].result as Address;
-      const decimals = vaultContractQueries[1].result as number;
-      const totalAssets = vaultContractQueries[2].result as bigint;
+      const name = vaultContractQueries[0].result as string;
+      const assetAddress = vaultContractQueries[1].result as Address;
+      const decimals = vaultContractQueries[2].result as number;
+      const totalAssets = vaultContractQueries[3].result as bigint;
 
       const assetContractQueries = await readContracts(wagmiConfig, {
         contracts: [
@@ -75,6 +83,7 @@ export async function fetchVaultsMetadata(): Promise<VaultMeta[]> {
 
       return {
         vault: {
+          name,
           address: vaultAddress,
           decimals,
           totalAssets,
