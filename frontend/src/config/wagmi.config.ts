@@ -1,25 +1,24 @@
-import {  createConfig, http } from "wagmi";
-import {  createClient } from "viem";
+import { createConfig, http } from "wagmi";
+import { createClient } from "viem";
 import { mainnet, sepolia } from "wagmi/chains";
 
 /***
  * Config Wagmi & AppKit support
  */
 
-  const localEthereum = {
-    id: 31337,
-    testnet: true,
-    name: "Local Ethereum Devnet",
-    nativeCurrency: {
-      name: "Ethereum",
-      symbol: "ETH",
-      decimals: 18,
-    },
-    rpcUrls: {
-      default: { http: ["http://localhost:8545"] },
-    },
-  };
-
+const localEthereum = {
+  id: 31337,
+  testnet: true,
+  name: "Local Ethereum Devnet",
+  nativeCurrency: {
+    name: "Ethereum",
+    symbol: "ETH",
+    decimals: 18,
+  },
+  rpcUrls: {
+    default: { http: ["http://localhost:8545"] },
+  },
+};
 
 // Configure Wagmi client for Ethereum interactions
 export const wagmiConfig = createConfig({

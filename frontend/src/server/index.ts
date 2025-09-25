@@ -1,1 +1,1 @@
-export * from './fetchVaultMeta'
+export * from "./fetchVaultMeta";
