@@ -77,7 +77,7 @@ export const VaultsTable = ({ vaultsMetadata }: VaultsTableProps) => {
           >
                      
 
-            {row.getVisibleCells().map((cell) => (
+            {row.getVisibleCells().map((cell) => (           
               <TableCell
                 key={cell.id}
                 className="group-hover:text-foreground/90 transition-colors"

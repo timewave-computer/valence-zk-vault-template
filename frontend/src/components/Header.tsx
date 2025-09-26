@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import { Button } from "@/components";
 
 interface HeaderProps {}
 
@@ -25,12 +26,13 @@ export const Header: React.FC<HeaderProps> = ({}) => {
 
         {/* Main Button */}
         <div className="flex items-center">
-          <button
+          <Button
+       
+            variant="primary"
             onClick={onMainButtonClick}
-            className="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-md bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-200 shadow-sm hover:shadow-md"
           >
             Wallet
-          </button>
+          </Button>
         </div>
       </div>
     </header>

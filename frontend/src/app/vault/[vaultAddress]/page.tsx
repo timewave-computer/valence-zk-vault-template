@@ -1,7 +1,7 @@
 import { fetchVaultData, VaultMeta } from "@/server";
 import { wagmiConfig } from "@/config";
-import { isAddress, type Address } from "viem";
 import { VaultPage } from "@/components";
+import { isAddress} from "viem";
 import { Suspense } from "react";
 
 export type PageProps = {

@@ -1,4 +1,4 @@
-import { type Address, isAddress } from "viem";
+import { isAddress } from "viem";
 import { wagmiConfig } from "@/config";
 import vaultAddresses from "../../vaults.config.json";
 import { VaultsTable } from "@/components";
