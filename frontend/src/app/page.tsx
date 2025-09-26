@@ -1,4 +1,4 @@
-import { type Address } from "viem";
+import { type Address, isAddress } from "viem";
 import { wagmiConfig } from "@/config";
 import vaultAddresses from "../../vaults.config.json";
 import { VaultsTable } from "@/components";
@@ -11,7 +11,10 @@ export default async function VaultsPage() {
   try {
     const vaultRequests = await Promise.allSettled(
       vaultAddresses.map(async (address: string): Promise<VaultMeta> => {
-        return fetchVaultData(wagmiConfig, address as Address);
+        if (!isAddress(address)) {
+          throw new Error(`Invalid address: ${address}`);
+        }
+        return fetchVaultData(wagmiConfig, address);
       }),
     );
     vaultsMetadata = vaultRequests

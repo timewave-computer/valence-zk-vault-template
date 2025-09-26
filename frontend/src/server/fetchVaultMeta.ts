@@ -47,6 +47,7 @@ export async function fetchVaultData(wagmiConfig: Config,vaultAddress: Address):
           },
     ],
   });
+  
   const name = vaultData[0].result as string
   const assetAddress = vaultData[1].result as Address
   const decimals = vaultData[2].result as number

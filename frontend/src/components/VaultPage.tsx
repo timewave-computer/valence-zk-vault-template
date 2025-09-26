@@ -6,7 +6,12 @@ import { formatToTwoDecimals } from "@/lib/utils";
 import { Button, TextInput } from "@/components/";
 import { useState } from "react";
 
-export const VaultPage = ({ vaultMeta, vaultAddress }: { vaultMeta?: VaultMeta, vaultAddress: string }) => {
+export type VaultPageProps = {
+  vaultMeta?: VaultMeta;
+  vaultAddress: string;
+};
+
+export const VaultPage = ({ vaultMeta, vaultAddress }: VaultPageProps) => {
   const [depositAmount, setDepositAmount] = useState<string>("");
   const [withdrawAmount, setWithdrawAmount] = useState<string>("");
     if (!vaultMeta) {

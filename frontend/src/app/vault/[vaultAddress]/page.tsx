@@ -1,6 +1,6 @@
 import { fetchVaultData, VaultMeta } from "@/server";
 import { wagmiConfig } from "@/config";
-import { type Address } from "viem";
+import { isAddress, type Address } from "viem";
 import { VaultPage } from "@/components";
 import { Suspense } from "react";
 
@@ -16,9 +16,13 @@ export default async function Page({ params }: PageProps) {
     let vaultMeta: VaultMeta | undefined = undefined;
     let fetchError: string | undefined = undefined;
     try {
-        vaultMeta = await fetchVaultData(wagmiConfig, vaultAddress as Address);
+        if (!isAddress(vaultAddress)) {
+          throw new Error(`Invalid address: ${vaultAddress}`);
+        }
+        vaultMeta = await fetchVaultData(wagmiConfig, vaultAddress);
     } catch (error) {
         fetchError = `Unable to fetch vault metadata for: ${vaultAddress}`;
+        console.error(fetchError);
     }
 
   return (
