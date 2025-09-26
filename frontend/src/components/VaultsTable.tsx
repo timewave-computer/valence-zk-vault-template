@@ -13,6 +13,9 @@ import {
   TableRow,
   TableCell,
 } from "@/components";
+import { useRouter } from "next/navigation";
+import { formatToTwoDecimals } from "@/lib/utils";
+import { formatUnits } from "viem";
 
 export type VaultsTableProps = {
   vaultsMetadata?: VaultMeta[];
@@ -32,7 +35,7 @@ export const VaultsTable = ({ vaultsMetadata }: VaultsTableProps) => {
       name: vault.vault.name,
       symbol: vault.asset.symbol,
       vaultAddress: vault.vault.address,
-      totalAssets: vault.vault.totalAssets,
+      totalAssets: formatToTwoDecimals(formatUnits(vault.vault.totalAssets, vault.vault.decimals)),
     })) ?? [];
 
   const table = useReactTable({
@@ -40,6 +43,7 @@ export const VaultsTable = ({ vaultsMetadata }: VaultsTableProps) => {
     columns: tableColumns,
     getCoreRowModel: getCoreRowModel(),
   });
+  const router = useRouter();
 
   if (!vaultsMetadata || data.length === 0) {
     return <div>No vaults to show</div>;
@@ -62,10 +66,17 @@ export const VaultsTable = ({ vaultsMetadata }: VaultsTableProps) => {
       </TableHeader>
       <TableBody>
         {table.getRowModel().rows.map((row) => (
+      
           <TableRow
+          onClick={() => {
+            router.push(`/vault/${row.original.vaultAddress}`);
+          }}
+          key={row.id}
             className="hover:scale-[1.01] transition-all duration-200 ease-in-out group cursor-pointer"
-            key={row.id}
+     
           >
+                     
+
             {row.getVisibleCells().map((cell) => (
               <TableCell
                 key={cell.id}
@@ -74,7 +85,9 @@ export const VaultsTable = ({ vaultsMetadata }: VaultsTableProps) => {
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </TableCell>
             ))}
+            
           </TableRow>
+   
         ))}
       </TableBody>
     </Table>
