@@ -2,12 +2,14 @@
 import React from "react";
 import Link from "next/link";
 import { Button } from "@/components";
-import { useDomainModal } from "@valence-protocol/domain-modal-react";
+import { shortenAddress, useDomainModal } from "@valence-protocol/domain-modal-react";
+import { useAccount } from "wagmi";
 
 interface HeaderProps {}
 
 export const Header: React.FC<HeaderProps> = ({}) => {
   const { showModal } = useDomainModal();
+  const { address, isConnected } = useAccount();
 
   return (
 
@@ -26,13 +28,18 @@ export const Header: React.FC<HeaderProps> = ({}) => {
 
         {/* Main Button */}
         <div className="flex items-center">
+          {isConnected && address ? <Button variant="secondary" onClick={() => showModal()}>
+            {shortenAddress(address)}
+          </Button>:
+
+    
           <Button
        
             variant="primary"
             onClick={() => showModal()}
           >
             Wallet
-          </Button>
+          </Button>}
         </div>
      
     </header>
