@@ -23,7 +23,7 @@ export const VaultPage = ({ vaultMeta, vaultAddress }: VaultPageProps) => {
         <h2 className="text-2xl font-semibold ">Total Assets</h2>
         <p className="font-mono font-light text-4xl pt-2">{formatToTwoDecimals(formatUnits(vaultMeta.vault.totalAssets, vaultMeta.vault.decimals))} {vaultMeta.asset.symbol}</p>
       </section>
-      <section className="flex flex-col md:grid md:grid-cols-2 gap-4 pt-4">
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
         <div className="border border-gray-100 p-8 flex flex-col items-start">
             <h2 className="text-lg font-semibold pb-4  ">Deposit</h2>
             <div className="flex flex-row gap-4 items-center w-full ">

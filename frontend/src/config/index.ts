@@ -1,1 +1,1 @@
-export * from "./evm.config";
+export * from "./domainClients.config";

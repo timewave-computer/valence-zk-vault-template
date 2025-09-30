@@ -1,5 +1,5 @@
 'use client';
-import { domainClientsConfig } from "@/config/domainClients.config";
+import { domainClientsConfig } from "@/config";
 import { ReactQueryProvider } from "@/context/ReactQueryProvider";
 import { DomainModalProvider } from "@valence-protocol/domain-modal-react";
 
