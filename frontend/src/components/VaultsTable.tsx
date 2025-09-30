@@ -35,7 +35,9 @@ export const VaultsTable = ({ vaultsMetadata }: VaultsTableProps) => {
       name: vault.vault.name,
       symbol: vault.asset.symbol,
       vaultAddress: vault.vault.address,
-      totalAssets: formatToTwoDecimals(formatUnits(vault.vault.totalAssets, vault.vault.decimals)),
+      totalAssets: formatToTwoDecimals(
+        formatUnits(vault.vault.totalAssets, vault.vault.decimals),
+      ),
     })) ?? [];
 
   const table = useReactTable({
@@ -66,17 +68,13 @@ export const VaultsTable = ({ vaultsMetadata }: VaultsTableProps) => {
       </TableHeader>
       <TableBody>
         {table.getRowModel().rows.map((row) => (
-      
           <TableRow
-          onClick={() => {
-            router.push(`/vault/${row.original.vaultAddress}`);
-          }}
-          key={row.id}
+            onClick={() => {
+              router.push(`/vault/${row.original.vaultAddress}`);
+            }}
+            key={row.id}
             className="hover:scale-[1.01] transition-all duration-200 ease-in-out group cursor-pointer"
-     
           >
-                     
-
             {row.getVisibleCells().map((cell) => (
               <TableCell
                 key={cell.id}
@@ -85,9 +83,7 @@ export const VaultsTable = ({ vaultsMetadata }: VaultsTableProps) => {
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </TableCell>
             ))}
-            
           </TableRow>
-   
         ))}
       </TableBody>
     </Table>

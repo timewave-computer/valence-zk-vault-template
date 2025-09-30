@@ -2,7 +2,6 @@
 import { readContracts, type Config } from "@wagmi/core";
 import { erc4626Abi, erc20Abi, type Address } from "viem";
 
-
 export type VaultMeta = {
   vault: {
     address: Address;
@@ -18,40 +17,43 @@ export type VaultMeta = {
   };
 };
 
-export async function fetchVaultData(wagmiConfig: Config,vaultAddress: Address): Promise<VaultMeta> {
+export async function fetchVaultData(
+  wagmiConfig: Config,
+  vaultAddress: Address,
+): Promise<VaultMeta> {
   const vaultData = await readContracts(wagmiConfig, {
     contracts: [
-        {
-            address: vaultAddress,
-            abi: erc20Abi,
-            functionName: "name",
-            args: [],
-          },
-          {
-            address: vaultAddress,
-            abi: erc4626Abi,
-            functionName: "asset",
-            args: [],
-          },
-          {
-            address: vaultAddress,
-            abi: erc20Abi,
-            functionName: "decimals",
-            args: [],
-          },
-          {
-            address: vaultAddress,
-            abi: erc4626Abi,
-            functionName: "totalAssets",
-            args: [],
-          },
+      {
+        address: vaultAddress,
+        abi: erc20Abi,
+        functionName: "name",
+        args: [],
+      },
+      {
+        address: vaultAddress,
+        abi: erc4626Abi,
+        functionName: "asset",
+        args: [],
+      },
+      {
+        address: vaultAddress,
+        abi: erc20Abi,
+        functionName: "decimals",
+        args: [],
+      },
+      {
+        address: vaultAddress,
+        abi: erc4626Abi,
+        functionName: "totalAssets",
+        args: [],
+      },
     ],
   });
-  
-  const name = vaultData[0].result as string
-  const assetAddress = vaultData[1].result as Address
-  const decimals = vaultData[2].result as number
-  const totalAssets = vaultData[3].result as bigint
+
+  const name = vaultData[0].result as string;
+  const assetAddress = vaultData[1].result as Address;
+  const decimals = vaultData[2].result as number;
+  const totalAssets = vaultData[3].result as bigint;
 
   const assetData = await readContracts(wagmiConfig, {
     contracts: [
@@ -60,10 +62,9 @@ export async function fetchVaultData(wagmiConfig: Config,vaultAddress: Address):
       { address: assetAddress, abi: erc20Abi, functionName: "symbol" },
     ],
   });
-  const assetDecimals = assetData[0].result as number
-  const assetName = assetData[1].result as string
-  const assetSymbol = assetData[2].result as string
-
+  const assetDecimals = assetData[0].result as number;
+  const assetName = assetData[1].result as string;
+  const assetSymbol = assetData[2].result as string;
 
   return {
     vault: {

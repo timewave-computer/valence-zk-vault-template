@@ -1,9 +1,8 @@
-import { type Address, isAddress } from "viem";
+import { isAddress } from "viem";
 import { wagmiConfig } from "@/config";
 import vaultAddresses from "../../vaults.config.json";
 import { VaultsTable } from "@/components";
 import { fetchVaultData, VaultMeta } from "@/server";
-
 
 export default async function VaultsPage() {
   let vaultsMetadata: VaultMeta[] | undefined = undefined;
@@ -28,7 +27,6 @@ export default async function VaultsPage() {
       fetchError = `Unable to fetch vault metadata for: ${failedRequests.join(", ")}`;
       console.error(fetchError);
     }
-
   } catch (error) {
     console.error("Error fetching vaults metadata", error);
     fetchError = "Error fetching vaults. Please try again.";

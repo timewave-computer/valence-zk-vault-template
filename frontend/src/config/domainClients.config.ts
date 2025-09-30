@@ -1,10 +1,7 @@
+import { DomainClientsConfig } from "@valence-protocol/domain-clients-react";
 import { createConfig, http } from "wagmi";
 import { createClient } from "viem";
 import { mainnet, sepolia } from "wagmi/chains";
-
-/***
- * Config Wagmi & AppKit support
- */
 
 const localEthereum = {
   id: 31337,
@@ -20,7 +17,6 @@ const localEthereum = {
   },
 };
 
-// Configure Wagmi client for Ethereum interactions
 export const wagmiConfig = createConfig({
   chains: [localEthereum, sepolia, mainnet],
   ssr: true, // for nextjs hydration errors
@@ -31,3 +27,10 @@ export const wagmiConfig = createConfig({
     });
   },
 });
+
+export const domainClientsConfig: DomainClientsConfig = {
+  evm: {
+    wagmiConfig,
+    defaultChainId: localEthereum.id,
+  },
+};
