@@ -26,25 +26,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-
     <html lang="en" className="min-h-screen px-4 md:px-6 lg:px-8">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased grid-cols-1 min-h-screen justify-center `}
       >
-              <AppProviders>
-                {/* this is a temporary hack to keep the wallet state synced when use leaves the page */}
-                <WalletStateSync />
-        <div className="max-w-7xl mx-auto">
-      
-        <Header />
-        {children}
-  
-        </div>
+        <AppProviders>
+          {/* this is a temporary hack to keep the wallet state synced when use leaves the page */}
+          <WalletStateSync />
+          <div className="max-w-7xl mx-auto">
+            <Header />
+            {children}
+          </div>
         </AppProviders>
-  
       </body>
- 
     </html>
-
   );
 }

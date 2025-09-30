@@ -3,7 +3,6 @@ import { createConfig, http } from "wagmi";
 import { createClient } from "viem";
 import { mainnet, sepolia } from "wagmi/chains";
 
-
 const localEthereum = {
   id: 31337,
   testnet: true,
@@ -18,7 +17,7 @@ const localEthereum = {
   },
 };
 
- export const wagmiConfig = createConfig({
+export const wagmiConfig = createConfig({
   chains: [localEthereum, sepolia, mainnet],
   ssr: true, // for nextjs hydration errors
   client({ chain }) {
@@ -29,11 +28,9 @@ const localEthereum = {
   },
 });
 
-
 export const domainClientsConfig: DomainClientsConfig = {
-    evm: {
-      wagmiConfig,
-      defaultChainId: localEthereum.id,
-    }
-  };
-  
+  evm: {
+    wagmiConfig,
+    defaultChainId: localEthereum.id,
+  },
+};
