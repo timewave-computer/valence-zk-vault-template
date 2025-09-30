@@ -2,16 +2,16 @@
 import React from "react";
 import Link from "next/link";
 import { Button } from "@/components";
+import { useDomainModal } from "@valence-protocol/domain-modal-react";
 
 interface HeaderProps {}
 
 export const Header: React.FC<HeaderProps> = ({}) => {
-  const onMainButtonClick = () => {
-    alert("Not implemented");
-  };
+  const { showModal } = useDomainModal();
+
   return (
-    <header>
-      <div className="flex flex-wrap gap-4 justify-between items-center py-4 mb-4">
+
+      <header className="w-full flex flex-wrap gap-4 justify-between items-center py-4 mb-4">
         {/* Logo and App Name */}
         <Link href="/" className="flex items-center space-x-3">
           <div className="flex-shrink-0">
@@ -29,12 +29,12 @@ export const Header: React.FC<HeaderProps> = ({}) => {
           <Button
        
             variant="primary"
-            onClick={onMainButtonClick}
+            onClick={() => showModal()}
           >
             Wallet
           </Button>
         </div>
-      </div>
+     
     </header>
   );
 };

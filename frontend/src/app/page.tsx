@@ -1,5 +1,5 @@
 import { isAddress } from "viem";
-import { wagmiConfig } from "@/config";
+  import {  wagmiConfig } from "@/config/domainClients.config";
 import vaultAddresses from "../../vaults.config.json";
 import { VaultsTable } from "@/components";
 import { fetchVaultData, VaultMeta } from "@/server";
