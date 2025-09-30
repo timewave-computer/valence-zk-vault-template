@@ -26,6 +26,7 @@ const tableColumns = [
   { accessorKey: "vaultAddress", header: "Address" },
   { accessorKey: "symbol", header: "Vault Asset" },
   { accessorKey: "totalAssets", header: "Total Assets" },
+  { accessorKey: "apr", header: "APR" },
 ];
 
 export const VaultsTable = ({ vaultsMetadata }: VaultsTableProps) => {
@@ -38,6 +39,7 @@ export const VaultsTable = ({ vaultsMetadata }: VaultsTableProps) => {
       totalAssets: formatToTwoDecimals(
         formatUnits(vault.vault.totalAssets, vault.vault.decimals),
       ),
+      apr: `${formatToTwoDecimals(vault.vault.apr*100)}%`,
     })) ?? [];
 
   const table = useReactTable({

@@ -8,6 +8,7 @@ export type VaultMeta = {
     name: string;
     decimals: number;
     totalAssets: bigint;
+    apr: number;
   };
   asset: {
     address: Address;
@@ -66,12 +67,15 @@ export async function fetchVaultData(
   const assetName = assetData[1].result as string;
   const assetSymbol = assetData[2].result as string;
 
+  const vaultApr = 0.15; // this is typically handled externally and fetching from a trusted API
+
   return {
     vault: {
       name,
       address: vaultAddress,
       decimals,
       totalAssets,
+      apr:vaultApr // this is typically handled externally and fetching from a trusted API
     },
     asset: {
       address: assetAddress,

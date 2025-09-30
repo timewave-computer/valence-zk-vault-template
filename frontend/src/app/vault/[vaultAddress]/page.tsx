@@ -4,6 +4,7 @@ import { VaultPage } from "@/components";
 import { isAddress } from "viem";
 import { Suspense } from "react";
 
+
 export type PageProps = {
   params: {
     vaultAddress: string;
@@ -21,22 +22,36 @@ export default async function Page({ params }: PageProps) {
     }
     vaultMeta = await fetchVaultData(wagmiConfig, vaultAddress);
   } catch (error) {
+    console.error(error);
     fetchError = `Unable to fetch vault metadata for: ${vaultAddress}`;
-    console.error(fetchError);
+    return (
+      <main>
+          <h1 className="text-3xl font-bold py-4">
+        {"Vault"}{" "}
+        <span className="font-mono font-light text-base break-all">
+          {vaultAddress}
+        </span>
+      </h1>
+      <p className="text-red-500">{fetchError}</p>
+      </main>
+    );
   }
 
   return (
     <main>
-      <h1 className="text-2xl font-bold py-4">
+      <h1 className="text-3xl font-bold py-4">
         {vaultMeta?.vault.name ?? "Vault"}{" "}
-        <span className="font-mono font-light text-sm break-all">
+        <span className="font-mono font-light text-base break-all">
           {vaultAddress}
         </span>
       </h1>
-      {fetchError && <p className="text-red-500">{fetchError}</p>}
-      <Suspense fallback={<p>Loading...</p>}>
+            <Suspense fallback={<p>Loading...</p>}>
         {<VaultPage vaultMeta={vaultMeta} vaultAddress={vaultAddress} />}
       </Suspense>
+
+   
+     
     </main>
   );
 }
+

@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="min-h-screen px-4 md:px-6 lg:px-8">
+    <html lang="en" className="min-h-screen px-4 sm:px-6 lg:px-8">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased grid-cols-1 min-h-screen justify-center `}
       >

@@ -33,7 +33,7 @@ export default async function VaultsPage() {
   }
   return (
     <main>
-      <h1 className="text-2xl font-bold py-4">Vaults</h1>
+      <h1 className="text-3xl font-bold py-4">Vaults</h1>
       {fetchError && <p className="text-red-500">{fetchError}</p>}
       <VaultsTable vaultsMetadata={vaultsMetadata} />
     </main>
