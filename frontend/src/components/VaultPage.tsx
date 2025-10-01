@@ -35,25 +35,25 @@ export const VaultPage = ({ vaultMeta }: VaultPageProps) => {
     ),
   );
 
-  const userVaultAssetBalance = userBalances?.vaultAssetBalance
+  const userVaultBaseAssetBalance = userBalances?.userVaultBaseAssetBalance
     ? formatToTwoDecimals(
-        formatUnits(userBalances.vaultAssetBalance, vaultMeta.vault.decimals),
+        formatUnits(userBalances.userVaultBaseAssetBalance, vaultMeta.asset.decimals),
       )
     : undefined;
-  const userBaseAssetBalance = userBalances?.baseAssetBalance
+  const userBaseAssetBalance = userBalances?.userBaseAssetBalance
     ? formatToTwoDecimals(
-        formatUnits(userBalances.baseAssetBalance, vaultMeta.asset.decimals),
+        formatUnits(userBalances.userBaseAssetBalance, vaultMeta.asset.decimals),
       )
     : undefined;
 
   const isDepositDisabled =
     !address ||
-    !userBalances?.baseAssetBalance ||
-    userBalances.baseAssetBalance === BigInt(0);
+    !userBalances?.userBaseAssetBalance ||
+    userBalances.userBaseAssetBalance === BigInt(0);
   const isWithdrawDisabled =
     !address ||
-    !userBalances?.vaultAssetBalance ||
-    userBalances.vaultAssetBalance === BigInt(0);
+    !userBalances?.userVaultAssetBalance ||
+    userBalances.userVaultAssetBalance === BigInt(0);
 
   const { mutate: deposit } = useVaultDeposit({
     vaultMeta,
@@ -103,7 +103,7 @@ export const VaultPage = ({ vaultMeta }: VaultPageProps) => {
       </p>
       <section className="flex flex-row gap-16 flex-wrap items-center justify-start  py-8">
         <div className="flex flex-col items-start justify-center ">
-          <h2 className="text-2xl font-semibold ">Total Assets</h2>
+          <h2 className="text-2xl font-semibold ">Vault TVL</h2>
           <p className="font-mono font-light text-xl pt-2">
             {vaultAssetBalance} {vaultMeta.asset.symbol}
           </p>
@@ -120,7 +120,7 @@ export const VaultPage = ({ vaultMeta }: VaultPageProps) => {
             <div className="flex flex-col items-start justify-center ">
               <h2 className="text-2xl font-semibold ">Your Vault Position</h2>
               <p className="font-mono font-light text-xl pt-2">
-                {userVaultAssetBalance ?? "-"}
+                {userVaultBaseAssetBalance ? `${userVaultBaseAssetBalance} ${vaultMeta.asset.symbol}` : "-"}
               </p>
             </div>
             <div className="flex flex-col items-start justify-center ">

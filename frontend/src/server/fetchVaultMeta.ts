@@ -22,7 +22,10 @@ export async function fetchVaultData(
   wagmiConfig: Config,
   vaultAddress: Address,
 ): Promise<VaultMeta> {
+  try {
+  
   const vaultData = await readContracts(wagmiConfig, {
+    allowFailure: false,
     contracts: [
       {
         address: vaultAddress,
@@ -51,23 +54,26 @@ export async function fetchVaultData(
     ],
   });
 
-  const name = vaultData[0].result as string;
-  const assetAddress = vaultData[1].result as Address;
-  const decimals = vaultData[2].result as number;
-  const totalAssets = vaultData[3].result as bigint;
+  const name = vaultData[0]
+  const assetAddress = vaultData[1]
+  const decimals = vaultData[2]
+  const totalAssets = vaultData[3]
+
 
   const assetData = await readContracts(wagmiConfig, {
+    allowFailure: false,
     contracts: [
       { address: assetAddress, abi: erc20Abi, functionName: "decimals" },
       { address: assetAddress, abi: erc20Abi, functionName: "name" },
       { address: assetAddress, abi: erc20Abi, functionName: "symbol" },
     ],
   });
-  const assetDecimals = assetData[0].result as number;
-  const assetName = assetData[1].result as string;
-  const assetSymbol = assetData[2].result as string;
+  const assetDecimals = assetData[0];
+  const assetName = assetData[1];
+  const assetSymbol = assetData[2];
 
-  const vaultApr = 0.15; // this is typically handled externally and fetching from a trusted API
+  const vaultApr = 0.15; // FYI: this is typically handled externally and fetching from a trusted API
+
 
   return {
     vault: {
@@ -84,4 +90,11 @@ export async function fetchVaultData(
       symbol: assetSymbol,
     },
   };
+}
+
+  catch (error) {
+    console.error("Fetch vault data error for:", vaultAddress, error);
+    throw Error("Failed to fetch vault data for address: " + vaultAddress);
+  }
+  
 }

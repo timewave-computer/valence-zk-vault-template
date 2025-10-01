@@ -17,9 +17,10 @@ export const useVaultData = ({ vaultMeta }: UseVaultDataInput) => {
     initialData: {
       totalAssets: vaultMeta.vault.totalAssets,
     },
-    queryKey: [QUERY_KEYS.USER_BALANCES, vaultMeta.vault.address],
+    queryKey: [QUERY_KEYS.VAULT_DATA, vaultMeta.vault.address],
     queryFn: async () => {
       const data = await readContracts(wagmiConfig, {
+        allowFailure: false,
         contracts: [
           {
             address: vaultMeta.vault.address,
@@ -30,7 +31,7 @@ export const useVaultData = ({ vaultMeta }: UseVaultDataInput) => {
         ],
       });
 
-      const totalAssets = data[0].result as bigint;
+      const totalAssets = data[0];
       return {
         totalAssets: totalAssets,
       };

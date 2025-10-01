@@ -1,7 +1,7 @@
 import { VaultMeta } from "@/server";
 import { erc20Abi, erc4626Abi } from "viem";
 import { useAccount, useConfig } from "wagmi";
-import { readContracts } from "@wagmi/core";
+import { readContract, readContracts } from "@wagmi/core";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/const";
 
@@ -25,6 +25,7 @@ export const useUserAssetBalances = ({
       }
 
       const data = await readContracts(wagmiConfig, {
+        allowFailure: false,
         contracts: [
           {
             address: vaultMeta.vault.address,
@@ -41,11 +42,25 @@ export const useUserAssetBalances = ({
         ],
       });
 
-      const vaultAssetBalance = data[0].result as bigint;
-      const baseAssetBalance = data[1].result as bigint;
+      
+
+      const userVaultAssetBalance = data[0];
+      const userBaseAssetBalance = data[1];
+
+      // convert "vault shares" to "base asset"
+      const userVaultBaseAssetBalance = await readContract(wagmiConfig, {
+          address: vaultMeta.vault.address,
+          abi: erc4626Abi,
+          functionName: "convertToAssets",
+          args: [userVaultAssetBalance],   
+      });
+      
+
       return {
-        vaultAssetBalance: vaultAssetBalance,
-        baseAssetBalance: baseAssetBalance,
+        userVaultAssetBalance: userVaultAssetBalance,
+        userVaultBaseAssetBalance: userVaultBaseAssetBalance,
+        userBaseAssetBalance: userBaseAssetBalance,
+        
       };
     },
   });
