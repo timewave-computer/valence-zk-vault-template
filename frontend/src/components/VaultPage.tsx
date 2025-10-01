@@ -6,11 +6,14 @@ import { formatToTwoDecimals } from "@/lib/utils";
 import { Button, TextInput } from "@/components/";
 import { useState, useCallback } from "react";
 import { useAccount } from "wagmi";
-import { useUserAssetBalances, useVaultDeposit, useVaultWithdraw } from "@/hooks";
+import {
+  useUserAssetBalances,
+  useVaultDeposit,
+  useVaultWithdraw,
+} from "@/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/const";
 import { useVaultData } from "@/hooks/useVaultData";
-
 
 export type VaultPageProps = {
   vaultMeta: VaultMeta;
@@ -26,16 +29,34 @@ export const VaultPage = ({ vaultMeta }: VaultPageProps) => {
   const queryClient = useQueryClient();
 
   const vaultAssetBalance = formatToTwoDecimals(
-    formatUnits(vaultData?.totalAssets ?? vaultMeta.vault.totalAssets, vaultMeta.vault.decimals),
-  )
+    formatUnits(
+      vaultData?.totalAssets ?? vaultMeta.vault.totalAssets,
+      vaultMeta.vault.decimals,
+    ),
+  );
 
-  const userVaultAssetBalance = userBalances?.vaultAssetBalance ? formatToTwoDecimals(formatUnits(userBalances.vaultAssetBalance, vaultMeta.vault.decimals)) : undefined;
-  const userBaseAssetBalance = userBalances?.baseAssetBalance ? formatToTwoDecimals(formatUnits(userBalances.baseAssetBalance, vaultMeta.asset.decimals)) : undefined;
+  const userVaultAssetBalance = userBalances?.vaultAssetBalance
+    ? formatToTwoDecimals(
+        formatUnits(userBalances.vaultAssetBalance, vaultMeta.vault.decimals),
+      )
+    : undefined;
+  const userBaseAssetBalance = userBalances?.baseAssetBalance
+    ? formatToTwoDecimals(
+        formatUnits(userBalances.baseAssetBalance, vaultMeta.asset.decimals),
+      )
+    : undefined;
 
-  const isDepositDisabled = !address || !userBalances?.baseAssetBalance || userBalances.baseAssetBalance === BigInt(0);
-  const isWithdrawDisabled = !address || !userBalances?.vaultAssetBalance || userBalances.vaultAssetBalance === BigInt(0);
+  const isDepositDisabled =
+    !address ||
+    !userBalances?.baseAssetBalance ||
+    userBalances.baseAssetBalance === BigInt(0);
+  const isWithdrawDisabled =
+    !address ||
+    !userBalances?.vaultAssetBalance ||
+    userBalances.vaultAssetBalance === BigInt(0);
 
-  const { mutate: deposit } = useVaultDeposit({ vaultMeta,
+  const { mutate: deposit } = useVaultDeposit({
+    vaultMeta,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_BALANCES] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.VAULT_DATA] });
@@ -43,17 +64,18 @@ export const VaultPage = ({ vaultMeta }: VaultPageProps) => {
     onError: (error) => {
       console.error("Error depositing:", error);
     },
-   });
+  });
 
-   const handleDeposit = useCallback(() => {
+  const handleDeposit = useCallback(() => {
     if (!address) {
       return;
     }
     const amount = parseUnits(depositAmount, vaultMeta.asset.decimals);
     deposit({ amount, address });
-   }, [address, depositAmount, deposit, vaultMeta]);
+  }, [address, depositAmount, deposit, vaultMeta]);
 
-  const { mutate: withdraw } = useVaultWithdraw({ vaultMeta,
+  const { mutate: withdraw } = useVaultWithdraw({
+    vaultMeta,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_BALANCES] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.VAULT_DATA] });
@@ -70,41 +92,47 @@ export const VaultPage = ({ vaultMeta }: VaultPageProps) => {
     withdraw({ amount, address });
   }, [address, withdrawAmount, withdraw, vaultMeta]);
 
-
   return (
     <div>
-      <p><span className="font-semibold">Base: </span>{vaultMeta.asset.symbol} <span className="font-mono font-light text-base break-all">({vaultMeta.asset.address})</span></p>
+      <p>
+        <span className="font-semibold">Base: </span>
+        {vaultMeta.asset.symbol}{" "}
+        <span className="font-mono font-light text-base break-all">
+          ({vaultMeta.asset.address})
+        </span>
+      </p>
       <section className="flex flex-row gap-16 flex-wrap items-center justify-start  py-8">
-      <div className="flex flex-col items-start justify-center ">
-        <h2 className="text-2xl font-semibold ">Total Assets</h2>
-        <p className="font-mono font-light text-xl pt-2">
-          {vaultAssetBalance}{" "}
-          {vaultMeta.asset.symbol}
-        </p>
-      </div>
-      <div className="flex flex-col items-start justify-center ">
-        <h2 className="text-2xl font-semibold ">APR</h2>
-        <p className="font-mono font-light text-xl pt-2">
-          {formatToTwoDecimals(vaultMeta.vault.apr*100)}
-          %
-        </p>
-      </div>
-    { address && <>  <div className="flex flex-col items-start justify-center ">
-        <h2 className="text-2xl font-semibold ">Your Vault Position</h2>
-        <p className="font-mono font-light text-xl pt-2">
-          {userVaultAssetBalance ?? '-'} 
-        </p>
-      </div>
-      <div className="flex flex-col items-start justify-center ">
-        <h2 className="text-2xl font-semibold ">Your {vaultMeta.asset.symbol} Balance</h2>
-        <p className="font-mono font-light text-xl pt-2">
-          {userBaseAssetBalance ?? '-'} 
-        </p>
-      </div>
-      </>
-      }
-
-
+        <div className="flex flex-col items-start justify-center ">
+          <h2 className="text-2xl font-semibold ">Total Assets</h2>
+          <p className="font-mono font-light text-xl pt-2">
+            {vaultAssetBalance} {vaultMeta.asset.symbol}
+          </p>
+        </div>
+        <div className="flex flex-col items-start justify-center ">
+          <h2 className="text-2xl font-semibold ">APR</h2>
+          <p className="font-mono font-light text-xl pt-2">
+            {formatToTwoDecimals(vaultMeta.vault.apr * 100)}%
+          </p>
+        </div>
+        {address && (
+          <>
+            {" "}
+            <div className="flex flex-col items-start justify-center ">
+              <h2 className="text-2xl font-semibold ">Your Vault Position</h2>
+              <p className="font-mono font-light text-xl pt-2">
+                {userVaultAssetBalance ?? "-"}
+              </p>
+            </div>
+            <div className="flex flex-col items-start justify-center ">
+              <h2 className="text-2xl font-semibold ">
+                Your {vaultMeta.asset.symbol} Balance
+              </h2>
+              <p className="font-mono font-light text-xl pt-2">
+                {userBaseAssetBalance ?? "-"}
+              </p>
+            </div>
+          </>
+        )}
       </section>
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
@@ -118,7 +146,12 @@ export const VaultPage = ({ vaultMeta }: VaultPageProps) => {
               className="grow"
             />
             <Button
-             variant="secondary" onClick={() => {handleDeposit()}} isDisabled={isDepositDisabled}>
+              variant="secondary"
+              onClick={() => {
+                handleDeposit();
+              }}
+              isDisabled={isDepositDisabled}
+            >
               Deposit
             </Button>
           </div>
@@ -134,7 +167,11 @@ export const VaultPage = ({ vaultMeta }: VaultPageProps) => {
             />
             <Button
               isDisabled={isWithdrawDisabled}
-             variant="secondary" onClick={() => {handleWithdraw()}}>
+              variant="secondary"
+              onClick={() => {
+                handleWithdraw();
+              }}
+            >
               Withdraw
             </Button>
           </div>
@@ -143,4 +180,3 @@ export const VaultPage = ({ vaultMeta }: VaultPageProps) => {
     </div>
   );
 };
-

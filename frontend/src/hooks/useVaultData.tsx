@@ -6,43 +6,34 @@ import { useConfig } from "wagmi";
 import { readContracts } from "wagmi/actions";
 
 export interface UseVaultDataInput {
-    vaultMeta: VaultMeta;
-
+  vaultMeta: VaultMeta;
 }
-export const useVaultData = ({
-    vaultMeta,
-}: UseVaultDataInput) => {
+export const useVaultData = ({ vaultMeta }: UseVaultDataInput) => {
   const wagmiConfig = useConfig();
 
   return useQuery({
     refetchInterval: 10000,
-    retry:false,
+    retry: false,
     initialData: {
-        totalAssets: vaultMeta.vault.totalAssets,
+      totalAssets: vaultMeta.vault.totalAssets,
     },
     queryKey: [QUERY_KEYS.USER_BALANCES, vaultMeta.vault.address],
-queryFn: async () => {
-
-
-    const data= await readContracts(wagmiConfig, {
+    queryFn: async () => {
+      const data = await readContracts(wagmiConfig, {
         contracts: [
-            {
-                address: vaultMeta.vault.address,
-                abi: erc4626Abi,
-                functionName: "totalAssets",
-                args: [],
-            },
-    
+          {
+            address: vaultMeta.vault.address,
+            abi: erc4626Abi,
+            functionName: "totalAssets",
+            args: [],
+          },
         ],
-    })
+      });
 
-    const totalAssets= data[0].result as bigint;
-    return {
+      const totalAssets = data[0].result as bigint;
+      return {
         totalAssets: totalAssets,
-    }
-},
-
-  })
-
-  
+      };
+    },
+  });
 };

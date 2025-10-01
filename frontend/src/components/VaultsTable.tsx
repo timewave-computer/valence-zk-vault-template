@@ -39,7 +39,7 @@ export const VaultsTable = ({ vaultsMetadata }: VaultsTableProps) => {
       totalAssets: formatToTwoDecimals(
         formatUnits(vault.vault.totalAssets, vault.vault.decimals),
       ),
-      apr: `${formatToTwoDecimals(vault.vault.apr*100)}%`,
+      apr: `${formatToTwoDecimals(vault.vault.apr * 100)}%`,
     })) ?? [];
 
   const table = useReactTable({
