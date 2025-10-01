@@ -75,7 +75,7 @@ export async function fetchVaultData(
       address: vaultAddress,
       decimals,
       totalAssets,
-      apr: vaultApr, // this is typically handled externally and fetching from a trusted API
+      apr: vaultApr,
     },
     asset: {
       address: assetAddress,
