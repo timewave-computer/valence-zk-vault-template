@@ -22,7 +22,6 @@ export const VaultPage = ({ vaultMeta }: VaultPageProps) => {
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
         <VaultDeposit vaultMeta={vaultMeta} />
-
         <VaultWithdraw vaultMeta={vaultMeta} />
       </section>
     </div>

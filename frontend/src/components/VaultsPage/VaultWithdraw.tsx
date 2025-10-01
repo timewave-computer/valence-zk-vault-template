@@ -1,3 +1,4 @@
+"use client";
 import { VaultMeta } from "@/server";
 import { Button, TextInput } from "@/components/common";
 import { useState } from "react";

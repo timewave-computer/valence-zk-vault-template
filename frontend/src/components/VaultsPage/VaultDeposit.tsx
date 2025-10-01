@@ -1,3 +1,4 @@
+"use client";
 import { Button, TextInput } from "@/components/common";
 import { useState, useCallback } from "react";
 import { parseUnits } from "viem";
