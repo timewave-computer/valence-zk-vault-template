@@ -4,9 +4,12 @@ import { VaultMeta } from "@/server";
 import { formatUnits, parseUnits } from "viem";
 import { formatToTwoDecimals } from "@/lib/utils";
 import { Button, TextInput } from "@/components/";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useAccount } from "wagmi";
-import { useUserAssetBalances } from "@/hooks";
+import { useUserAssetBalances, useVaultDeposit, useVaultWithdraw } from "@/hooks";
+import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/const";
+import { useVaultData } from "@/hooks/useVaultData";
 
 
 export type VaultPageProps = {
@@ -18,23 +21,64 @@ export const VaultPage = ({ vaultMeta }: VaultPageProps) => {
   const [depositAmount, setDepositAmount] = useState<string>("");
   const [withdrawAmount, setWithdrawAmount] = useState<string>("");
   const { address } = useAccount();
-  const { data,isLoading } = useUserAssetBalances({ vaultMeta });
-console.log(data, isLoading);
-  const isDepositDisabled = !address;
-  const isWithdrawDisabled = !address;
+  const { data: userBalances } = useUserAssetBalances({ vaultMeta });
+  const { data: vaultData } = useVaultData({ vaultMeta });
+  const queryClient = useQueryClient();
 
-  const userVaultAssetBalance = data?.vaultAssetBalance ? formatToTwoDecimals(parseUnits(data.vaultAssetBalance.toString(), vaultMeta.vault.decimals)) : undefined;
+  const vaultAssetBalance = formatToTwoDecimals(
+    formatUnits(vaultData?.totalAssets ?? vaultMeta.vault.totalAssets, vaultMeta.vault.decimals),
+  )
 
-  const userBaseAssetBalance = data?.baseAssetBalance ? formatToTwoDecimals(parseUnits(data.baseAssetBalance.toString(), vaultMeta.asset.decimals)) : undefined;
+  const userVaultAssetBalance = userBalances?.vaultAssetBalance ? formatToTwoDecimals(formatUnits(userBalances.vaultAssetBalance, vaultMeta.vault.decimals)) : undefined;
+  const userBaseAssetBalance = userBalances?.baseAssetBalance ? formatToTwoDecimals(formatUnits(userBalances.baseAssetBalance, vaultMeta.asset.decimals)) : undefined;
+
+  const isDepositDisabled = !address || !userBalances?.baseAssetBalance || userBalances.baseAssetBalance === BigInt(0);
+  const isWithdrawDisabled = !address || !userBalances?.vaultAssetBalance || userBalances.vaultAssetBalance === BigInt(0);
+
+  const { mutate: deposit } = useVaultDeposit({ vaultMeta,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_BALANCES] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.VAULT_DATA] });
+    },
+    onError: (error) => {
+      console.error("Error depositing:", error);
+    },
+   });
+
+   const handleDeposit = useCallback(() => {
+    if (!address) {
+      return;
+    }
+    const amount = parseUnits(depositAmount, vaultMeta.asset.decimals);
+    deposit({ amount, address });
+   }, [address, depositAmount, deposit, vaultMeta]);
+
+  const { mutate: withdraw } = useVaultWithdraw({ vaultMeta,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_BALANCES] });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.VAULT_DATA] });
+    },
+    onError: (error) => {
+      console.error("Error withdrawing:", error);
+    },
+  });
+  const handleWithdraw = useCallback(() => {
+    if (!address) {
+      return;
+    }
+    const amount = parseUnits(withdrawAmount, vaultMeta.vault.decimals);
+    withdraw({ amount, address });
+  }, [address, withdrawAmount, withdraw, vaultMeta]);
+
+
   return (
     <div>
+      <p><span className="font-semibold">Base: </span>{vaultMeta.asset.symbol} <span className="font-mono font-light text-base break-all">({vaultMeta.asset.address})</span></p>
       <section className="flex flex-row gap-16 flex-wrap items-center justify-start  py-8">
       <div className="flex flex-col items-start justify-center ">
         <h2 className="text-2xl font-semibold ">Total Assets</h2>
         <p className="font-mono font-light text-xl pt-2">
-          {formatToTwoDecimals(
-            parseUnits(vaultMeta.vault.totalAssets.toString(), vaultMeta.vault.decimals),
-          )}{" "}
+          {vaultAssetBalance}{" "}
           {vaultMeta.asset.symbol}
         </p>
       </div>
@@ -52,7 +96,7 @@ console.log(data, isLoading);
         </p>
       </div>
       <div className="flex flex-col items-start justify-center ">
-        <h2 className="text-2xl font-semibold ">Wallet Asset Balance</h2>
+        <h2 className="text-2xl font-semibold ">Your {vaultMeta.asset.symbol} Balance</h2>
         <p className="font-mono font-light text-xl pt-2">
           {userBaseAssetBalance ?? '-'} 
         </p>
@@ -74,7 +118,7 @@ console.log(data, isLoading);
               className="grow"
             />
             <Button
-             variant="secondary" onClick={() => {}} isDisabled={isDepositDisabled}>
+             variant="secondary" onClick={() => {handleDeposit()}} isDisabled={isDepositDisabled}>
               Deposit
             </Button>
           </div>
@@ -90,7 +134,7 @@ console.log(data, isLoading);
             />
             <Button
               isDisabled={isWithdrawDisabled}
-             variant="secondary" onClick={() => {}}>
+             variant="secondary" onClick={() => {handleWithdraw()}}>
               Withdraw
             </Button>
           </div>

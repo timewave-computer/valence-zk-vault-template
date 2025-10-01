@@ -3,19 +3,23 @@ import { erc20Abi, erc4626Abi } from "viem";
 import { useAccount, useConfig } from "wagmi";
 import { readContracts } from "@wagmi/core";
 import { useQuery } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/const";
 
-export interface UseVaultActionsInput {
+export interface UseUserAssetBalancesInput {
     vaultMeta: VaultMeta;
 
 }
 export const useUserAssetBalances = ({
     vaultMeta,
-}: UseVaultActionsInput) => {
+}: UseUserAssetBalancesInput) => {
   const { address } = useAccount();
   const wagmiConfig = useConfig();
 
   return useQuery({
     enabled: !!address,
+    refetchInterval: 10000,
+    retry:false,
+    queryKey: [QUERY_KEYS.USER_BALANCES, vaultMeta.vault.address, address],
 queryFn: async () => {
 
     if (!address) {
@@ -46,7 +50,6 @@ queryFn: async () => {
         baseAssetBalance: baseAssetBalance,
     }
 },
-queryKey: ["userBalances", vaultMeta.vault.address, address],
 
   })
 
