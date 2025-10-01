@@ -1,17 +1,17 @@
 import { VaultMeta } from "@/server";
-import { erc20Abi, erc4626Abi } from "viem";
-import { useAccount, useConfig } from "wagmi";
+import { Address, erc20Abi, erc4626Abi } from "viem";
+import { useConfig } from "wagmi";
 import { readContract, readContracts } from "@wagmi/core";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/const";
 
-export interface UseUserAssetBalancesInput {
-  vaultMeta: VaultMeta;
-}
 export const useUserAssetBalances = ({
   vaultMeta,
-}: UseUserAssetBalancesInput) => {
-  const { address } = useAccount();
+  address,
+}: {
+  vaultMeta: VaultMeta;
+  address?: Address;
+}) => {
   const wagmiConfig = useConfig();
 
   return useQuery({
@@ -23,7 +23,6 @@ export const useUserAssetBalances = ({
       if (!address) {
         throw new Error("Address is not connected");
       }
-
       const data = await readContracts(wagmiConfig, {
         allowFailure: false,
         contracts: [
