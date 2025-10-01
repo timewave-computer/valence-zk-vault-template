@@ -26,11 +26,13 @@ export default async function VaultsPage() {
       throw new Error(failedRequests.join(", "));
     }
   } catch (error) {
-    console.error('error fetching vaults metadata', error);
+    console.error("error fetching vaults metadata", error);
     return (
       <main>
         <h1 className="text-3xl font-bold py-4">Vaults</h1>
-        <p className="text-red-500">{"Failed to fetch vaults. Please try again."}</p>
+        <p className="text-red-500">
+          {"Failed to fetch vaults. Please try again."}
+        </p>
       </main>
     );
   }

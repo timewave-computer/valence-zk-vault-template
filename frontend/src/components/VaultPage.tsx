@@ -37,12 +37,18 @@ export const VaultPage = ({ vaultMeta }: VaultPageProps) => {
 
   const userVaultBaseAssetBalance = userBalances?.userVaultBaseAssetBalance
     ? formatToTwoDecimals(
-        formatUnits(userBalances.userVaultBaseAssetBalance, vaultMeta.asset.decimals),
+        formatUnits(
+          userBalances.userVaultBaseAssetBalance,
+          vaultMeta.asset.decimals,
+        ),
       )
     : undefined;
   const userBaseAssetBalance = userBalances?.userBaseAssetBalance
     ? formatToTwoDecimals(
-        formatUnits(userBalances.userBaseAssetBalance, vaultMeta.asset.decimals),
+        formatUnits(
+          userBalances.userBaseAssetBalance,
+          vaultMeta.asset.decimals,
+        ),
       )
     : undefined;
 
@@ -120,7 +126,9 @@ export const VaultPage = ({ vaultMeta }: VaultPageProps) => {
             <div className="flex flex-col items-start justify-center ">
               <h2 className="text-2xl font-semibold ">Your Vault Position</h2>
               <p className="font-mono font-light text-xl pt-2">
-                {userVaultBaseAssetBalance ? `${userVaultBaseAssetBalance} ${vaultMeta.asset.symbol}` : "-"}
+                {userVaultBaseAssetBalance
+                  ? `${userVaultBaseAssetBalance} ${vaultMeta.asset.symbol}`
+                  : "-"}
               </p>
             </div>
             <div className="flex flex-col items-start justify-center ">

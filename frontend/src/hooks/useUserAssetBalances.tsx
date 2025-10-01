@@ -42,25 +42,21 @@ export const useUserAssetBalances = ({
         ],
       });
 
-      
-
       const userVaultAssetBalance = data[0];
       const userBaseAssetBalance = data[1];
 
       // convert "vault shares" to "base asset"
       const userVaultBaseAssetBalance = await readContract(wagmiConfig, {
-          address: vaultMeta.vault.address,
-          abi: erc4626Abi,
-          functionName: "convertToAssets",
-          args: [userVaultAssetBalance],   
+        address: vaultMeta.vault.address,
+        abi: erc4626Abi,
+        functionName: "convertToAssets",
+        args: [userVaultAssetBalance],
       });
-      
 
       return {
         userVaultAssetBalance: userVaultAssetBalance,
         userVaultBaseAssetBalance: userVaultBaseAssetBalance,
         userBaseAssetBalance: userBaseAssetBalance,
-        
       };
     },
   });

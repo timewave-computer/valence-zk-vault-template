@@ -36,9 +36,12 @@ export const VaultsTable = ({ vaultsMetadata }: VaultsTableProps) => {
       name: vault.vault.name,
       symbol: vault.asset.symbol,
       vaultAddress: vault.vault.address,
-      totalAssets: formatToTwoDecimals(
-        formatUnits(vault.vault.totalAssets, vault.vault.decimals),
-      )+' '+vault.asset.symbol,
+      totalAssets:
+        formatToTwoDecimals(
+          formatUnits(vault.vault.totalAssets, vault.vault.decimals),
+        ) +
+        " " +
+        vault.asset.symbol,
       apr: `${formatToTwoDecimals(vault.vault.apr * 100)}%`,
     })) ?? [];
 
