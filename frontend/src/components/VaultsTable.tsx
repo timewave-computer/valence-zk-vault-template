@@ -24,8 +24,9 @@ export type VaultsTableProps = {
 const tableColumns = [
   { accessorKey: "name", header: "Name" },
   { accessorKey: "vaultAddress", header: "Address" },
-  { accessorKey: "symbol", header: "Vault Asset" },
-  { accessorKey: "totalAssets", header: "Total Assets" },
+  { accessorKey: "symbol", header: "Base Asset" },
+  { accessorKey: "totalAssets", header: "Vault TVL" },
+  { accessorKey: "apr", header: "APR" },
 ];
 
 export const VaultsTable = ({ vaultsMetadata }: VaultsTableProps) => {
@@ -35,9 +36,13 @@ export const VaultsTable = ({ vaultsMetadata }: VaultsTableProps) => {
       name: vault.vault.name,
       symbol: vault.asset.symbol,
       vaultAddress: vault.vault.address,
-      totalAssets: formatToTwoDecimals(
-        formatUnits(vault.vault.totalAssets, vault.vault.decimals),
-      ),
+      totalAssets:
+        formatToTwoDecimals(
+          formatUnits(vault.vault.totalAssets, vault.vault.decimals),
+        ) +
+        " " +
+        vault.asset.symbol,
+      apr: `${formatToTwoDecimals(vault.vault.apr * 100)}%`,
     })) ?? [];
 
   const table = useReactTable({
